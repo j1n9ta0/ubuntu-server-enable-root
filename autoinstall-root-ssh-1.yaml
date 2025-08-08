@@ -1,0 +1,33 @@
+#cloud-config
+autoinstall:
+  version: 1
+
+  interactive-sections:
+    - network
+    - storage
+
+  locale: zh_CN.UTF-8
+
+  keyboard:
+    layout: us
+
+  ssh:
+    install-server: true
+    allow-pw: true
+
+  debconf-selections: |
+    openssh-server openssh-server/permit-root-login boolean false
+
+  timezone: "Asia/Shanghai"
+
+  late-commands:
+    - curtin in-target -- apt purge nano screen ufw -y
+    - curtin in-target -- lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv
+    - curtin in-target -- resize2fs /dev/ubuntu-vg/ubuntu-lv
+
+  user-data:
+    disable_root: false
+    users:
+      - name: root
+        lock_passwd: false
+        plain-text-passwd: "123456"
