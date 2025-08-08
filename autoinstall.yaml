@@ -31,3 +31,4 @@ autoinstall:
       - name: root
         lock_passwd: false
         plain-text-passwd: "123456"
+
